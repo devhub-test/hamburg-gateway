@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hamburg-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: hamburg-poi-gateway-app-dev
+    backstage.io/kubernetes-id: hamburg-poi-gateway-app
+    backstage.io/kubernetes-namespace: hamburg
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: devhub-test/hamburg-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.redhatdevhub.l07n.p1.openshiftapps.com/dev-pipelines/ns/hamburg/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.redhatdevhub.l07n.p1.openshiftapps.com/k8s/ns/hamburg/deployments/hamburg-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.redhatdevhub.l07n.p1.openshiftapps.com/#https://github.com/devhub-test/hamburg-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/hpgrahsl"
+  system: workshop-system-hamburg
+  providesApis:
+    - gateway-api-hamburg
+  consumesApis:
+    - backend-api-hamburg
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-hamburg
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/hpgrahsl"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-hamburg
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://hamburg-poi-gateway-app-hamburg.apps.redhatdevhub.l07n.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/devhub-test/hamburg-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/hpgrahsl"
+  system: workshop-system-hamburg
+  definition:
+    $text: https://github.com/devhub-test/hamburg-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
